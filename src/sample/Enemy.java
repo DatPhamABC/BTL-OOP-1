@@ -74,7 +74,7 @@ public class Enemy extends GameEntity {
     // method
     public void Run(Stage stage, final int x_now , final int y_now, Stack<String> direction)
     {
-           image.show(stage,x_now,y_now);
+        image.show(stage,x_now,y_now);
            Timeline timeline = new
                    Timeline(new KeyFrame(Duration.millis(20),
                    (evt)->{
@@ -84,39 +84,35 @@ public class Enemy extends GameEntity {
                            health.showHealth(stage,image.getImageView().getX(),image.getImageView().getY(),health.getBlood());
                        }
                        catch (NullPointerException e) {}
-                       try
-                       {
-                           String way = new String();
+                       if (Config.blPause == false && Config.blStart == true) {
                            try {
-                               way = checkRoad((int)image.getImageView().getX(),(int)image.getImageView().getY(),direction);
-                           }
-                           catch (Exception e){}
-                           if(way.equals("right"))
-                           {
-                               image.getImageView().setX(image.getImageView().getX()+1);
-                               if(image.getImageView().getX() >= Config.width_scene-Config.width_menu || health.getBlood() == 0 ) die();
-                           }
-                           if(way.equals("up"))
-                           {
-                               image.getImageView().setY(image.getImageView().getY()-1);
-                               if(image.getImageView().getY()-11 < 0 || health.getBlood() == 0) die();
-                           }
-                           if(way.equals("down"))
-                           {
-                               image.getImageView().setY(image.getImageView().getY()+1);
-                               if(image.getImageView().getY() >= Config.height_scene || health.getBlood() == 0) die();
-                           }
-                           if(way.equals("left"))
-                           {
-                               image.getImageView().setX(image.getImageView().getX()-1);
-                               if(image.getImageView().getX() <0 || health.getBlood() == 0) die();
+                               String way = new String();
+                               try {
+                                   way = checkRoad((int) image.getImageView().getX(), (int) image.getImageView().getY(), direction);
+                               } catch (Exception e) {
+                               }
+                               if (way.equals("right")) {
+                                   image.getImageView().setX(image.getImageView().getX() + 1);
+                                   if (image.getImageView().getX() >= Config.width_scene - Config.width_menu || health.getBlood() == 0)
+                                       die();
+                               }
+                               if (way.equals("up")) {
+                                   image.getImageView().setY(image.getImageView().getY() - 1);
+                                   if (image.getImageView().getY() - 11 < 0 || health.getBlood() == 0) die();
+                               }
+                               if (way.equals("down")) {
+                                   image.getImageView().setY(image.getImageView().getY() + 1);
+                                   if (image.getImageView().getY() >= Config.height_scene || health.getBlood() == 0)
+                                       die();
+                               }
+                               if (way.equals("left")) {
+                                   image.getImageView().setX(image.getImageView().getX() - 1);
+                                   if (image.getImageView().getX() < 0 || health.getBlood() == 0) die();
+                               }
+                           } catch (ArrayIndexOutOfBoundsException e) {
+
                            }
                        }
-                       catch (ArrayIndexOutOfBoundsException e)
-                       {
-
-                       }
-
                    }
            ));
            timeline.setCycleCount(Animation.INDEFINITE);
