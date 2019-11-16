@@ -46,12 +46,11 @@ public class Main extends Application {
         Config.imgButtonStart.getImageView().setFocusTraversable(true);
 
         // Exit game
-        Config.imgButtonExit.getImageView().setOnMouseDragged(mouseEvent -> {
-            Config.mediaPlayerSL.play();
+        Config.imgButtonExit.getImageView().setOnMousePressed(mouseEvent -> {
             primaryStage.close();
         });
         // startGame
-        Config.imgButtonStart.getImageView().setOnMouseClicked(mouseEvent -> {
+        Config.imgButtonStart.getImageView().setOnMousePressed(mouseEvent -> {
             Config.mediaPlayerSL.play();
             primaryStage.setX(70);
             primaryStage.setY(0);
@@ -107,7 +106,7 @@ public class Main extends Application {
                    }
                    Config.slTower1++;
                    Config.Money-=10;
-                   Config.labelMoney.setText(Config.Money+"");
+                   Config.labelMoney.setText(String.valueOf(Config.Money));
                    Config.label1.setText(Config.slTower1+"");
                }
             });
@@ -152,45 +151,18 @@ public class Main extends Application {
 //                        Config.mediaPlayerSL.stop();
 //                        Config.mediaPlayerSL.play();
                         Config.blSound = false;
-                        Config.mediaPlayerBG.stop();
+                        Config.mediaPlayerBG.pause();
                     }
                     else
                     {
                         if(Config.pane.getChildren().contains(Config.imgSound.getImageView())) Config.pane.getChildren().remove(Config.imgSound.getImageView());
-                        {
-                            Config.imgSound.show(primaryStage,936,0);
-                            Config.blSound = true;
-                            Config.mediaPlayerBG.stop();
-                            Config.mediaPlayerBG.play();
-                        }
-                    }
-                }
-                else if(mouseEvent1.getSceneX() >=990 && mouseEvent1.getSceneX() <= 990+133 && mouseEvent1.getSceneY() >= 490 && mouseEvent1.getSceneY() <= 490+30)
-                {
-                    if(Config.blPause==false)
-                    {
-                        if(Config.blSound==true)
-                        {
-                            Config.mediaPlayerSL.stop();
-                            Config.mediaPlayerSL.play();
-                        }
-                        if(Config.pane.getChildren().contains(Config.imgPause.getImageView())) Config.pane.getChildren().remove(Config.imgPause.getImageView());
-                         Config.imgResume.show(primaryStage,990,490);
-                         Config.blPause=true;
-                    }
-                    else
-                    {
-                        if(Config.blSound==true)
-                        {
-                            Config.mediaPlayerSL.stop();
-                            Config.mediaPlayerSL.play();
-                        }
-                        if(Config.pane.getChildren().contains(Config.imgResume.getImageView())) Config.pane.getChildren().remove(Config.imgResume.getImageView());
-                        Config.imgPause.show(primaryStage,990,490);
-                        Config.blPause=false;
+                        Config.imgSound.show(primaryStage,936,0);
+                        Config.blSound = true;
+                        Config.mediaPlayerBG.play();
                     }
                 }
             });
+
             GameField gameField = new GameField();
             try
             {
@@ -207,8 +179,9 @@ public class Main extends Application {
                 gameStage.loadArrayEnemy("arrEnemy.txt");
             }
             catch (Exception e) {}
-            Stack<Enemy> newStack =gameStage.getStackEnemy();
+            Stack<Enemy> newStack = gameStage.getStackEnemy();
             Tower.towerSpawn(primaryStage);
+
             Config.imgMenu.getImageView().setOnMouseClicked(mouseEvent1 -> {
                 System.out.println(mouseEvent1.getSceneX()+" "+mouseEvent1.getSceneY());
                 if(mouseEvent1.getSceneX() >=975 && mouseEvent1.getSceneX() <= 1135 && mouseEvent1.getSceneY() >= 535 && mouseEvent1.getSceneY() <= 570)
@@ -235,6 +208,32 @@ public class Main extends Application {
                        Config.blStart=true;
                        timeline.setCycleCount(Animation.INDEFINITE);
                        timeline.play();
+                       Config.pane.setOnMouseClicked(event ->
+                       {
+                           if(event.getSceneX() >=990 && event.getSceneX() <= 990+133 && event.getSceneY() >= 490 && event.getSceneY() <= 490+30)
+                           {
+                               if(Config.blPause==false)
+                               {
+                                   if(Config.blSound==true)
+                                   {
+                                       Config.mediaPlayerSL.stop();
+                                       Config.mediaPlayerSL.play();
+                                   }
+                                   timeline.pause();
+                                   Config.blPause=true;
+                               }
+                               else
+                               {
+                                   if(Config.blSound==true)
+                                   {
+                                       Config.mediaPlayerSL.stop();
+                                       Config.mediaPlayerSL.play();
+                                   }
+                                   timeline.play();
+                                   Config.blPause=false;
+                               }
+                           }
+                       });
                    }
                 }
                 });
